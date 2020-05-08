@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tools for UXers</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/buefy/dist/buefy.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+    <script src="https://unpkg.com/buefy/dist/buefy.min.js"></script>
+</head>
+
+<body>
+    <!--Entry section-->
+    <section>
+        <div class="hero is-fullheight is-primary">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title has-text-centered">Welcome! Here's my collection of useful tools for UXers</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--Color Tools-->
+    <section>
+        <div class="hero is-large">
+            <div class="hero-body">
+                <h2 class="title">Color Converter</h2>
+                <div class="container" id="colorConverter">
+                    <div class="columns">
+                        <div class="column is-one-third">
+                            <b-field label="RGB">
+                                <b-input v-model="rgbInput" v-on:input="convertColors('rgb')"></b-input>
+                            </b-field>
+                            <b-field label="HEX">
+                                <b-input v-model="hexInput" v-on:input="convertColors('hex')"></b-input>
+                            </b-field>
+                            <b-field label="HSL">
+                                <b-input v-model="hslInput" v-on:input="convertColors('hsl')"></b-input>
+                            </b-field>
+                            <b-field label="HWB">
+                                <b-input v-model="hwbInput" v-on:input="convertColors('hwb')"></b-input>
+                            </b-field>
+                            <b-field label="CMYK">
+                                <b-input v-model="cmykInput" v-on:input="convertColors('cmyk')"></b-input>
+                            </b-field>
+                        </div>
+                        <div class="column" v-bind:style="{backgroundColor: currentColor}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        var colorPic = new Vue({
+            el: "#colorConverter",
+            data: {
+                rgbInput: "129,216,208",
+                hexInput: "#81d8d0",
+                hslInput: "174,53%,68%",
+                hwbInput: "174,51%,15%",
+                cmykInput: "40%,0%,4%,15%",
+                currentColor: "#81d8d0"
+            },
+            methods: {
+                convertColors: function (caller) {
+                    switch (caller) {
+                        case "rgb":
+                            var newHex = this.rgbToHEX(this.rgbInput);
+                            if (newHex !== this.currentColor) {
+                                this.hexInput = newHex;
+                                this.hslInput = this.hexToHSL(newHex);
+                                this.hwbInput = this.hexToHWB(newHex);
+                                this.cmykInput = this.hexToCMYK(newHex);
+                                this.currentColor = newHex;
+                            }
+                            break;
+                        case "hex":
+                            if (this.hexInput !== this.currentColor) {
+                                this.rgbInput = this.hexToRGB(this.hexInput);
+                                this.hslInput = this.hexToHSL(this.hexInput);
+                                this.hwbInput = this.hexToHWB(this.hexInput);
+                                this.cmykInput = this.hexToCMYK(this.hexInput);
+                                this.currentColor = this.hexInput;
+                            }
+                            break;
+                        case "hsl":
+                            var newRGB = this.hslToRGB(this.hslInput);
+                            var newHex = this.rgbToHEX(newRGB);
+                            if (newHex !== this.currentColor) {
+                                this.hexInput = newHex;
+                                this.rgbInput = newRGB;
+                                this.hwbInput = this.hexToHWB(newHex);
+                                this.cmykInput = this.hexToCMYK(newHex);
+                                this.currentColor = newHex;
+                            }
+                            break;
+                        case "hwb":
+                            var newRGB = this.hwbToRGB(this.hwbInput);
+                            var newHex = this.rgbToHEX(newRGB);
+                            if (newHex !== this.currentColor) {
+                                this.hexInput = newHex;
+                                this.rgbInput = newRGB;
+                                this.hslInput = this.rgbToHSL(newRGB);
+                                this.cmykInput = this.rgbToCMYK(newRGB);
+                                this.currentColor = newHex;
+                            }
+                            break;
+                        case "cmyk":
+                            var newRGB = this.cmykToRGB(this.cmykInput);
+                            var newHex = this.rgbToHEX(newRGB);
+                            if (newHex !== this.currentColor) {
+                                this.hexInput = newHex;
+                                this.rgbInput = newRGB;
+                                this.hslInput = this.rgbToHSL(newRGB);
+                                this.hwbInput = this.rgbToHWB(newRGB);
+                                this.currentColor = newHex;
+                            }
+                    }
+
+                },
+                hexToRGB: function (hexInput) {
+                    /* Check for # in front of the value, if it's there, strip it */
+                    if (hexInput.substring(0, 1) == '#') {
+                        hexInput = hexInput.substring(1);
+                    }
+
+                    /* conver hex values to decimals*/
+                    if (hexInput.length == 3) {
+                        var r = parseInt(hexInput.charAt(0) + hexInput.charAt(0), 16);
+                        var g = parseInt(hexInput.charAt(1) + hexInput.charAt(1), 16);
+                        var b = parseInt(hexInput.charAt(2) + hexInput.charAt(2), 16);
+                    } else {
+                        var r = parseInt(hexInput.substring(0, 2), 16);
+                        var g = parseInt(hexInput.substring(2, 4), 16);
+                        var b = parseInt(hexInput.substring(4), 16);
+                    }
+
+                    return r + "," + g + "," + b;
+                },
+
+                rgbToHEX: function (rgbInput) {
+                    var r = parseInt(rgbInput.split(",")[0]);
+                    var g = parseInt(rgbInput.split(',')[1]);
+                    var b = parseInt(rgbInput.split(",")[2]);
+                    var hexR = r.toString(16);
+                    if (hexR.length == 1) {
+                        hexR = hexR + hexR;
+                    }
+                    var hexG = g.toString(16);
+                    if (hexG.length == 1) {
+                        hexG = hexG + hexG;
+                    }
+                    var hexB = b.toString(16);
+                    if (hexB.length == 1) {
+                        hexB = hexB + hexB;
+                    }
+                    var hexInput = "#" + hexR + hexG + hexB;
+                    return hexInput
+                },
+
+                rgbToHSL: function (rgbInput) {
+                    var r = parseInt(rgbInput.split(",")[0]);
+                    var g = parseInt(rgbInput.split(',')[1]);
+                    var b = parseInt(rgbInput.split(",")[2]);
+                    var r1 = r / 255;
+                    var g1 = g / 255;
+                    var b1 = b / 255;
+
+                    var cMax = Math.max(r1, g1, b1);
+                    var cMin = Math.min(r1, g1, b1);
+                    var delta = cMax - cMin;
+
+                    /*calculate hue*/
+                    if (delta == 0) {
+                        var h = 0;
+                    } else if (cMax == r1) {
+                        var h = 60 * ((g1 - b1) / delta % 6);
+                    } else if (cMax == g1) {
+                        var h = 60 * ((b1 - r1) / delta + 2);
+                    } else if (cMax == b1) {
+                        var h = 60 * ((r1 - g1) / delta + 4);
+                    }
+                    h = Math.round(h);
+                    if (h < 0) {
+                        h = 360 + h;
+                    }
+
+                    /*calculate lightness*/
+                    var l = (cMax + cMin) / 2;
+
+                    /*calculate saturation*/
+                    if (delta == 0) {
+                        var s = 0;
+                    } else {
+                        if (l < 0.5) {
+                            var s = (cMax - cMin) / (cMax + cMin);
+                        } else {
+                            var s = (cMax - cMin) / (2 - cMax - cMin);
+                        }
+                    }
+                    l = Math.round(l * 100);
+                    s = Math.round(s * 100);
+
+                    var hslInput = h + "," + s + "%," + l + "%";
+                    return hslInput
+                },
+
+                hslToRGB: function (hslInput) {
+                    var hue = parseInt(hslInput.split(",")[0]);
+                    var sat = parseInt(hslInput.split(",")[1].slice(0, -1)) / 100;
+                    var light = parseInt(hslInput.split(",")[2].slice(0, -1)) / 100;
+                    var t1, t2, r, g, b;
+                    hue = hue / 60;
+                    if (light <= 0.5) {
+                        t2 = light * (sat + 1);
+                    } else {
+                        t2 = light + sat - (light * sat);
+                    }
+                    t1 = light * 2 - t2;
+                    r = Math.round(this.hueToRGB(t1, t2, hue + 2) * 255);
+                    g = Math.round(this.hueToRGB(t1, t2, hue) * 255);
+                    b = Math.round(this.hueToRGB(t1, t2, hue - 2) * 255);
+                    var rgbInput = r + "," + g + "," + b;
+                    return rgbInput
+                },
+
+                hueToRGB: function (t1, t2, hue) {
+                    if (hue < 0) hue += 6;
+                    if (hue >= 6) hue -= 6;
+                    if (hue < 1) return (t2 - t1) * hue + t1;
+                    else if (hue < 3) return t2;
+                    else if (hue < 4) return (t2 - t1) * (4 - hue) + t1;
+                    else return t1;
+                },
+
+                hexToHSL: function (hexInput) {
+                    var rgbInput = this.hexToRGB(hexInput);
+                    var hslInput = this.rgbToHSL(rgbInput);
+                    return hslInput
+                },
+
+                rgbToHWB: function (rgbInput) {
+                    var h, w, bl;
+                    var r = parseInt(rgbInput.split(",")[0]);
+                    var g = parseInt(rgbInput.split(',')[1]);
+                    var b = parseInt(rgbInput.split(",")[2]);
+                    var r1 = r / 255;
+                    var g1 = g / 255;
+                    var b1 = b / 255;
+                    var cMax = Math.max(r1, g1, b1);
+                    var cMin = Math.min(r1, g1, b1);
+                    var delta = cMax - cMin;
+                    /*calculate hue*/
+                    if (delta == 0) {
+                        var h = 0;
+                    } else if (cMax == r1) {
+                        var h = 60 * ((g1 - b1) / delta % 6);
+                    } else if (cMax == g1) {
+                        var h = 60 * ((b1 - r1) / delta + 2);
+                    } else if (cMax == b1) {
+                        var h = 60 * ((r1 - g1) / delta + 4);
+                    }
+                    h = Math.round(h);
+                    if (h < 0) {
+                        h = 360 + h;
+                    }
+                    var w = Math.round(cMin * 100);
+                    var bl = Math.round((1 - cMax) * 100);
+                    var hwbInput = h + "," + w + "%," + bl + "%";
+                    return hwbInput
+                },
+
+                hwbToRGB: function (hwbInput) {
+                    var h = parseInt(hwbInput.split(",")[0]);
+                    var w = parseInt(hwbInput.split(",")[1].slice(0, -1)) / 100;
+                    var bl = parseInt(hwbInput.split(",")[2].slice(0, -1)) / 100;
+                    var i, rgb, rgbArr = [], tot;
+                    var rgbInput = this.hslToRGB(h + ",100%" + ",50%");
+                    var r = parseInt(rgbInput.split(",")[0]);
+                    var g = parseInt(rgbInput.split(',')[1]);
+                    var b = parseInt(rgbInput.split(",")[2]);
+                    console.log(r, g, b);
+                    rgbArr[0] = r / 255;
+                    rgbArr[1] = g / 255;
+                    rgbArr[2] = b / 255;
+                    tot = w + bl;
+                    if (tot > 1) {
+                        w = Number((w / tot).toFixed(2));
+                        bl = Number((bl / tot).toFixed(2));
+                    }
+                    for (i = 0; i < 3; i++) {
+                        rgbArr[i] *= (1 - (w) - (bl));
+                        rgbArr[i] += (w);
+                        rgbArr[i] = Number(rgbArr[i] * 255);
+                    }
+                    rgbInput = Math.round(rgbArr[0]) + "," + Math.round(rgbArr[1]) + "," + Math.round(rgbArr[2]);
+                    return rgbInput
+                },
+
+                hexToHWB: function (hexInput) {
+                    var rgbInput = this.hexToRGB(hexInput);
+                    var hwbInput = this.rgbToHWB(rgbInput);
+                    return hwbInput
+                },
+
+                rgbToCMYK: function (rgbInput) {
+                    var c, m, y, k;
+                    var r = parseInt(rgbInput.split(",")[0]);
+                    var g = parseInt(rgbInput.split(',')[1]);
+                    var b = parseInt(rgbInput.split(",")[2]);
+                    var r1 = r / 255;
+                    var g1 = g / 255;
+                    var b1 = b / 255;
+                    var cMax = Math.max(r1, g1, b1);
+                    var k = 1 - cMax;
+                    if (k == 1) {
+                        c = 0;
+                        m = 0;
+                        y = 0;
+                    } else {
+                        c = (1 - r1 - k) / (1 - k);
+                        m = (1 - g1 - k) / (1 - k);
+                        y = (1 - b1 - k) / (1 - k);
+                    }
+                    c = Math.round(c * 100);
+                    m = Math.round(m * 100);
+                    y = Math.round(y * 100);
+                    k = Math.round(k * 100);
+                    var cmykInput = c + "%," + m + "%," + y + "%," + k + "%";
+                    return cmykInput
+                },
+
+                cmykToRGB: function (cmykInput) {
+                    var c, m, y, k
+                    var r, g, b;
+                    c = parseInt(cmykInput.split(",")[0].slice(0, -1)) / 100;
+                    m = parseInt(cmykInput.split(",")[1].slice(0, -1)) / 100;
+                    y = parseInt(cmykInput.split(",")[2].slice(0, -1)) / 100;
+                    k = parseInt(cmykInput.split(",")[3].slice(0, -1)) / 100;
+
+                    r = Math.round(255 - ((Math.min(1, c * (1 - k) + k)) * 255));
+                    g = Math.round(255 - ((Math.min(1, m * (1 - k) + k)) * 255));
+                    b = Math.round(255 - ((Math.min(1, y * (1 - k) + k)) * 255));
+                    var rgbInput = r + "," + g + "," + b;
+                    return rgbInput
+                },
+
+                hexToCMYK: function (hexInput) {
+                    var rgbInput = this.hexToRGB(hexInput);
+                    var cmykInput = this.rgbToCMYK(rgbInput);
+                    return cmykInput
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
