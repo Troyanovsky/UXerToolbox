@@ -25,11 +25,13 @@
 
     <!--Color Tools-->
     <section>
-        <div class="hero is-large">
+        <div class="hero is-fullheight" id="colorConverter" v-bind:style="{backgroundColor: currentColor}">
             <div class="hero-body">
-                <h2 class="title">Color Converter</h2>
-                <div class="container" id="colorConverter">
+
+                <div class="container">
+                    <h2 class="title has-text-centered">Color Converter</h2>
                     <div class="columns">
+                        <div class="column is-one-third"></div>
                         <div class="column is-one-third">
                             <b-field label="RGB">
                                 <b-input v-model="rgbInput" v-on:input="convertColors('rgb')"></b-input>
@@ -47,8 +49,7 @@
                                 <b-input v-model="cmykInput" v-on:input="convertColors('cmyk')"></b-input>
                             </b-field>
                         </div>
-                        <div class="column" v-bind:style="{backgroundColor: currentColor}">
-                        </div>
+                        <div class="column is-one-third"></div>
                     </div>
                 </div>
             </div>
