@@ -20,10 +20,6 @@
             right: 30px;
             z-index: 99;
         }
-
-        #stepsLabel label {
-            color: #ffffff;
-        }
     </style>
 </head>
 
@@ -96,10 +92,10 @@
 
     <!--Color Mixer-->
     <section>
-        <div class="hero is-fullheight" id="colorMixer" style="background-color:#808080;">
+    <div class="hero is-fullheight" id="colorMixer" v-bind:style="{ backgroundImage: backgroundGradient }">
             <div class="hero-body">
                 <div class="container">
-                    <h2 class="title has-text-centered has-text-white">Color Mixer (Gradient)</h2>
+                    <h2 class="title has-text-centered">Color Mixer (Gradient)</h2>
                     <div class="columns">
                         <div class="column is-one-third"></div>
                         <div class="column is-one-third">
@@ -115,7 +111,7 @@
                                     </b-field>
                                 </div>
                             </div>
-                            <b-field label="Steps" id="stepsLabel">
+                            <b-field label="Steps">
                                 <b-slider :min="1" :max="10" ticks v-model="stepsInput" v-on:input="updateGradients">
                                 </b-slider>
                             </b-field>
@@ -541,7 +537,6 @@
                         var g = parseInt(hexInput.substring(2, 4), 16);
                         var b = parseInt(hexInput.substring(4), 16);
                     }
-                    console.log(r, g, b);
                     return [r, g, b]
                 },
 
@@ -553,6 +548,12 @@
                         .catch(err => {
                             console.log('Something went wrong', err);
                         });
+                }
+            },
+            computed: {
+                backgroundGradient() {
+                    var gradientString = "linear-gradient(to right," + this.color1Input + "," + this.color2Input + ")";
+                    return gradientString;
                 }
             }
         })
