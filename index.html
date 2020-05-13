@@ -176,6 +176,46 @@
                 cmykInput: "40%,0%,4%,15%",
                 currentColor: "#81d8d0"
             },
+            mounted() {
+                if (localStorage.rgbInput) {
+                    this.rgbInput = localStorage.rgbInput;
+                }
+                if (localStorage.hexInput) {
+                    this.hexInput = localStorage.hexInput;
+                }
+                if (localStorage.hslInput) {
+                    this.hslInput = localStorage.hslInput;
+                }
+                if (localStorage.hwbInput) {
+                    this.hwbInput = localStorage.hwbInput;
+                }
+                if (localStorage.cmykInput) {
+                    this.cmykInput = localStorage.cmykInput;
+                }
+                if (localStorage.currentColor) {
+                    this.currentColor = localStorage.currentColor;
+                }
+            },
+            watch: {
+                rgbInput(newRgbInput) {
+                    localStorage.rgbInput = newRgbInput;
+                },
+                hexInput(newHexInput) {
+                    localStorage.hexInput = newHexInput;
+                },
+                hslInput(newHslInput) {
+                    localStorage.hslInput = newHslInput;
+                },
+                hwbInput(newHwbInput) {
+                    localStorage.hwbInput = newHwbInput;
+                },
+                cmykInput(newCmykInput) {
+                    localStorage.cmykInput = newCmykInput;
+                },
+                currentColor(newCurrentColor) {
+                    localStorage.currentColor = newCurrentColor;
+                },
+            },
             methods: {
                 convertColors: function (caller) {
                     switch (caller) {
@@ -475,11 +515,36 @@
             data: {
                 color1Input: "#f5dbf6",
                 color2Input: "#feebda",
-                stepsInput: 1,
+                stepsInput: 4,
                 gradients: [
                     { gradient: "#ffe0e1" }
                 ]
             },
+
+            mounted() {
+                if (localStorage.color1Input) {
+                    this.color1Input = localStorage.color1Input;
+                }
+                if (localStorage.color2Input) {
+                    this.color2Input = localStorage.color2Input;
+                }
+                if (localStorage.stepsInput) {
+                    this.stepsInput = localStorage.stepsInput;
+                }
+            },
+
+            watch: {
+                color1Input(newColor1Input) {
+                    localStorage.color1Input = newColor1Input;
+                },
+                color2Input(newColor2Input) {
+                    localStorage.color2Input = newColor2Input;
+                },
+                stepsInput(newStepsInput) {
+                    localStorage.stepsInput = newStepsInput;
+                }
+            },
+
             methods: {
                 updateGradients: function () {
                     this.gradients = this.generateGradients();
