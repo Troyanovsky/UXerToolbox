@@ -92,7 +92,7 @@
 
     <!--Color Mixer-->
     <section>
-    <div class="hero is-fullheight" id="colorMixer" v-bind:style="{ backgroundImage: backgroundGradient }">
+        <div class="hero is-fullheight" id="colorMixer" v-bind:style="{ backgroundImage: backgroundGradient }">
             <div class="hero-body">
                 <div class="container">
                     <h2 class="title has-text-centered">Color Mixer (Gradient)</h2>
@@ -116,9 +116,9 @@
                                 </b-slider>
                             </b-field>
                             <div class="buttons has-text-centered">
-                                <div class="button" v-for="gradient in gradients"
+                                <div class="button has-tooltip-arrow" v-for="gradient in gradients"
                                     v-bind:style="{ backgroundColor: gradient.gradient}"
-                                    v-on:click="copyColor(gradient.gradient)">
+                                    v-on:click="copyColor(gradient.gradient)" data-tooltip="Click to Copy">
                                     {{gradient.gradient}}</div>
                             </div>
                         </div>
@@ -499,9 +499,9 @@
 
                     for (let i = 0; i < this.stepsInput; i++) {
                         let newR, newG, newB
-                        newR = Math.round((r2 - r1) / (this.stepsInput+1) * (i + 1) + r1);
-                        newG = Math.round((g2 - g1) / (this.stepsInput+1) * (i + 1) + g1);
-                        newB = Math.round((b2 - b1) / (this.stepsInput+1) * (i + 1) + b1);
+                        newR = Math.round((r2 - r1) / (this.stepsInput + 1) * (i + 1) + r1);
+                        newG = Math.round((g2 - g1) / (this.stepsInput + 1) * (i + 1) + g1);
+                        newB = Math.round((b2 - b1) / (this.stepsInput + 1) * (i + 1) + b1);
 
                         var hexR = newR.toString(16);
                         if (hexR.length == 1) {
