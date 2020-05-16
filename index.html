@@ -12,6 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
     <script src="https://unpkg.com/buefy/dist/buefy.min.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
     <style>
         #backToTopBtn {
             display: none;
@@ -40,6 +41,9 @@
                                     Mixer (Gradient)</button>
                                 <button class="button is-rounded" onclick="scrollToView('colorSchemes')">Color Scheme
                                     Generator</button>
+                            </div>
+                            <div class="buttons is-centered">
+                                <button class="button is-rounded" onclick="scrollToView('fontComparer')">Font Comparer</button>
                             </div>
                         </div>
                         <div class="column is-one-third"></div>
@@ -145,69 +149,109 @@
                             <span class="tag is-large"
                                 v-bind:style="{backgroundColor: colorInput}">{{colorInput}}</span>
                             <p><br /></p>
-                        
+
                             <p>Complementary:</p>
                             <span class="tag is-medium has-tooltip-arrow"
-                            v-bind:style="{backgroundColor: complementaryScheme}" data-tooltip="Click to Copy"
-                            v-on:click="copyColor(complementaryScheme)">{{complementaryScheme}}</span>
+                                v-bind:style="{backgroundColor: complementaryScheme}" data-tooltip="Click to Copy"
+                                v-on:click="copyColor(complementaryScheme)">{{complementaryScheme}}</span>
 
                             <p> Monochromatic:</p>
                             <span class="tag is-medium has-tooltip-arrow"
-                            v-bind:style="{backgroundColor: monoScheme[0]}" data-tooltip="Click to Copy"
-                            v-on:click="copyColor(monoScheme[0])">{{monoScheme[0]}}</span>
+                                v-bind:style="{backgroundColor: monoScheme[0]}" data-tooltip="Click to Copy"
+                                v-on:click="copyColor(monoScheme[0])">{{monoScheme[0]}}</span>
                             <span class="tag is-medium has-tooltip-arrow"
-                            v-bind:style="{backgroundColor: monoScheme[1]}" data-tooltip="Click to Copy"
-                            v-on:click="copyColor(monoScheme[1])">{{monoScheme[1]}}</span>
+                                v-bind:style="{backgroundColor: monoScheme[1]}" data-tooltip="Click to Copy"
+                                v-on:click="copyColor(monoScheme[1])">{{monoScheme[1]}}</span>
 
                             <p> Split-Complementary:</p>
                             <span class="tag is-medium has-tooltip-arrow"
-                            v-bind:style="{backgroundColor: splitScheme[0]}" data-tooltip="Click to Copy"
-                            v-on:click="copyColor(splitScheme[0])">{{splitScheme[0]}}</span>
+                                v-bind:style="{backgroundColor: splitScheme[0]}" data-tooltip="Click to Copy"
+                                v-on:click="copyColor(splitScheme[0])">{{splitScheme[0]}}</span>
                             <span class="tag is-medium has-tooltip-arrow"
-                            v-bind:style="{backgroundColor: splitScheme[1]}" data-tooltip="Click to Copy"
-                            v-on:click="copyColor(splitScheme[1])">{{splitScheme[1]}}</span>
+                                v-bind:style="{backgroundColor: splitScheme[1]}" data-tooltip="Click to Copy"
+                                v-on:click="copyColor(splitScheme[1])">{{splitScheme[1]}}</span>
 
                             <p> 30 &#176 Analogous:</p>
                             <span class="tag is-medium has-tooltip-arrow"
-                            v-bind:style="{backgroundColor: analogousScheme[0]}" data-tooltip="Click to Copy"
-                            v-on:click="copyColor(analogousScheme[0])">{{analogousScheme[0]}}</span>
+                                v-bind:style="{backgroundColor: analogousScheme[0]}" data-tooltip="Click to Copy"
+                                v-on:click="copyColor(analogousScheme[0])">{{analogousScheme[0]}}</span>
                             <span class="tag is-medium has-tooltip-arrow"
-                            v-bind:style="{backgroundColor: analogousScheme[1]}" data-tooltip="Click to Copy"
-                            v-on:click="copyColor(analogousScheme[1])">{{analogousScheme[1]}}</span>
+                                v-bind:style="{backgroundColor: analogousScheme[1]}" data-tooltip="Click to Copy"
+                                v-on:click="copyColor(analogousScheme[1])">{{analogousScheme[1]}}</span>
 
                             <p> Triadic:</p>
                             <span class="tag is-medium has-tooltip-arrow"
-                            v-bind:style="{backgroundColor: triadicScheme[0]}" data-tooltip="Click to Copy"
-                            v-on:click="copyColor(triadicScheme[0])">{{triadicScheme[0]}}</span>
+                                v-bind:style="{backgroundColor: triadicScheme[0]}" data-tooltip="Click to Copy"
+                                v-on:click="copyColor(triadicScheme[0])">{{triadicScheme[0]}}</span>
                             <span class="tag is-medium has-tooltip-arrow"
-                            v-bind:style="{backgroundColor: triadicScheme[1]}" data-tooltip="Click to Copy"
-                            v-on:click="copyColor(triadicScheme[1])">{{triadicScheme[1]}}</span>
+                                v-bind:style="{backgroundColor: triadicScheme[1]}" data-tooltip="Click to Copy"
+                                v-on:click="copyColor(triadicScheme[1])">{{triadicScheme[1]}}</span>
 
                             <p> Tetradic:</p>
                             <span class="tag is-medium has-tooltip-arrow"
-                            v-bind:style="{backgroundColor: triadicScheme[0]}" data-tooltip="Click to Copy"
-                            v-on:click="copyColor(tetradicScheme[0])">{{tetradicScheme[0]}}</span>
+                                v-bind:style="{backgroundColor: triadicScheme[0]}" data-tooltip="Click to Copy"
+                                v-on:click="copyColor(tetradicScheme[0])">{{tetradicScheme[0]}}</span>
                             <span class="tag is-medium has-tooltip-arrow"
-                            v-bind:style="{backgroundColor: tetradicScheme[1]}" data-tooltip="Click to Copy"
-                            v-on:click="copyColor(tetradicScheme[1])">{{tetradicScheme[1]}}</span>
+                                v-bind:style="{backgroundColor: tetradicScheme[1]}" data-tooltip="Click to Copy"
+                                v-on:click="copyColor(tetradicScheme[1])">{{tetradicScheme[1]}}</span>
                             <span class="tag is-medium has-tooltip-arrow"
-                            v-bind:style="{backgroundColor: tetradicScheme[2]}" data-tooltip="Click to Copy"
-                            v-on:click="copyColor(tetradicScheme[2])">{{tetradicScheme[2]}}</span>
+                                v-bind:style="{backgroundColor: tetradicScheme[2]}" data-tooltip="Click to Copy"
+                                v-on:click="copyColor(tetradicScheme[2])">{{tetradicScheme[2]}}</span>
 
                             <p> Square:</p>
                             <span class="tag is-medium has-tooltip-arrow"
-                            v-bind:style="{backgroundColor: squareScheme[0]}" data-tooltip="Click to Copy"
-                            v-on:click="copyColor(squareScheme[0])">{{squareScheme[0]}}</span>
+                                v-bind:style="{backgroundColor: squareScheme[0]}" data-tooltip="Click to Copy"
+                                v-on:click="copyColor(squareScheme[0])">{{squareScheme[0]}}</span>
                             <span class="tag is-medium has-tooltip-arrow"
-                            v-bind:style="{backgroundColor: squareScheme[1]}" data-tooltip="Click to Copy"
-                            v-on:click="copyColor(squareScheme[1])">{{squareScheme[1]}}</span>
+                                v-bind:style="{backgroundColor: squareScheme[1]}" data-tooltip="Click to Copy"
+                                v-on:click="copyColor(squareScheme[1])">{{squareScheme[1]}}</span>
                             <span class="tag is-medium has-tooltip-arrow"
-                            v-bind:style="{backgroundColor: squareScheme[2]}" data-tooltip="Click to Copy"
-                            v-on:click="copyColor(squareScheme[2])">{{squareScheme[2]}}</span>
+                                v-bind:style="{backgroundColor: squareScheme[2]}" data-tooltip="Click to Copy"
+                                v-on:click="copyColor(squareScheme[2])">{{squareScheme[2]}}</span>
 
                         </div>
                         <div class="column is-one-third"></div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--Font Comparer-->
+    <section class="hero is-fullheight has-background-light" id="fontComparer">
+        <div class="hero-body">
+            <div class="container">
+                <h2 class="title has-text-centered">Font Comparer</h2>
+                <div class="columns">
+                    <div class="column is-one-third"></div>
+                    <div class="column is-one-third">
+                        <b-field label="Type characters to compare:">
+                            <b-input v-model="fontChar" minlength="1" maxlength="6" required placeholder="AaBbCc">
+                            </b-input>
+                        </b-field>
+                        <div class="columns">
+                            <div class="column is-half">
+                                <h3 class="subtitle has-text-centered has-text-weight-bold">Font 1</h3>
+                                <b-select placeholder="Open Sans" v-model="font1Input" v-on:input="changeFont"
+                                    expanded="true">
+                                    <option v-for="font in fontList.items">{{font.family}}</option>
+                                </b-select>
+                                <p class="has-text-centered is-size-3" v-bind:style="{ 'font-family': getFont1 }">
+                                    {{fontChar}}</p>
+                            </div>
+                            <div class="column is-half">
+                                <h3 class="subtitle has-text-centered has-text-weight-bold">Font 2</h3>
+                                <b-select placeholder="Roboto" v-model="font2Input" expanded="true">
+                                    <option v-for="font in fontList.items">{{font.family}}</option>
+                                </b-select>
+                                <p class="has-text-centered is-size-3" v-bind:style="{ 'font-family': getFont2 }">
+                                    {{fontChar}}</p>
+                            </div>
+                        </div>
+                        <p class="is-size-7">* Supports fonts from <a href="https://fonts.google.com/"
+                                target="_blank">Googlt Fonts</a></p>
+                    </div>
+                    <div class="column is-one-third"></div>
                 </div>
             </div>
         </div>
@@ -771,21 +815,21 @@
                     var hue = parseInt(hslInput.split(",")[0], 10);
                     var sat = parseInt(hslInput.split(",")[1].slice(0, -1), 10);
                     var light = parseInt(hslInput.split(",")[2].slice(0, -1), 10);
-                    var newHexInput1 = this.rgbToHEX(this.hslToRGB(hue + "," + (sat+33)%100 + "%," + light + "%"));
-                    var newHexInput2 = this.rgbToHEX(this.hslToRGB(hue + "," + (sat+66)%100 + "%," + light + "%"));
+                    var newHexInput1 = this.rgbToHEX(this.hslToRGB(hue + "," + (sat + 33) % 100 + "%," + light + "%"));
+                    var newHexInput2 = this.rgbToHEX(this.hslToRGB(hue + "," + (sat + 66) % 100 + "%," + light + "%"));
                     var monoScheme = [newHexInput1, newHexInput2];
                     return monoScheme
                 },
 
-                generateSplit: function (){
+                generateSplit: function () {
                     var rgbInput = this.hexToRGB(this.colorInput);
                     var hslInput = this.rgbToHSL(rgbInput);
                     var hue = parseInt(hslInput.split(",")[0], 10);
                     var sat = parseInt(hslInput.split(",")[1].slice(0, -1), 10);
                     var light = parseInt(hslInput.split(",")[2].slice(0, -1), 10);
-                    var complementaryHue = (hue+180)%360;
-                    var newHexInput1 = this.rgbToHEX(this.hslToRGB(((complementaryHue-30)%360) + "," + sat + "%," + light + "%"));
-                    var newHexinput2 = this.rgbToHEX(this.hslToRGB(((complementaryHue+30)%360) + "," + sat + "%," + light + "%"));
+                    var complementaryHue = (hue + 180) % 360;
+                    var newHexInput1 = this.rgbToHEX(this.hslToRGB(((complementaryHue - 30) % 360) + "," + sat + "%," + light + "%"));
+                    var newHexinput2 = this.rgbToHEX(this.hslToRGB(((complementaryHue + 30) % 360) + "," + sat + "%," + light + "%"));
                     var splitScheme = [newHexInput1, newHexinput2];
                     return splitScheme
                 },
@@ -796,8 +840,8 @@
                     var hue = parseInt(hslInput.split(",")[0], 10);
                     var sat = parseInt(hslInput.split(",")[1].slice(0, -1), 10);
                     var light = parseInt(hslInput.split(",")[2].slice(0, -1), 10);
-                    var newHexInput1 = this.rgbToHEX(this.hslToRGB(((hue-30)%360) + "," + sat + "%," + light + "%"));
-                    var newHexinput2 = this.rgbToHEX(this.hslToRGB(((hue+30)%360) + "," + sat + "%," + light + "%"));
+                    var newHexInput1 = this.rgbToHEX(this.hslToRGB(((hue - 30) % 360) + "," + sat + "%," + light + "%"));
+                    var newHexinput2 = this.rgbToHEX(this.hslToRGB(((hue + 30) % 360) + "," + sat + "%," + light + "%"));
                     var analogousScheme = [newHexInput1, newHexinput2];
                     return analogousScheme
                 },
@@ -808,8 +852,8 @@
                     var hue = parseInt(hslInput.split(",")[0], 10);
                     var sat = parseInt(hslInput.split(",")[1].slice(0, -1), 10);
                     var light = parseInt(hslInput.split(",")[2].slice(0, -1), 10);
-                    var newHexInput1 = this.rgbToHEX(this.hslToRGB(((hue-120)%360) + "," + sat + "%," + light + "%"));
-                    var newHexinput2 = this.rgbToHEX(this.hslToRGB(((hue+120)%360) + "," + sat + "%," + light + "%"));
+                    var newHexInput1 = this.rgbToHEX(this.hslToRGB(((hue - 120) % 360) + "," + sat + "%," + light + "%"));
+                    var newHexinput2 = this.rgbToHEX(this.hslToRGB(((hue + 120) % 360) + "," + sat + "%," + light + "%"));
                     var triadicScheme = [newHexInput1, newHexinput2];
                     return triadicScheme
                 },
@@ -821,9 +865,9 @@
                     var sat = parseInt(hslInput.split(",")[1].slice(0, -1), 10);
                     var light = parseInt(hslInput.split(",")[2].slice(0, -1), 10);
                     var newHue = (hue + 40) % 360;
-                    var newHexInput1 = this.rgbToHEX(this.hslToRGB(((hue+120)%360) + "," + sat + "%," + light + "%"));
-                    var newHexinput2 = this.rgbToHEX(this.hslToRGB(( newHue + "," + sat + "%," + light + "%")));
-                    var newHexinput3 = this.rgbToHEX(this.hslToRGB(((newHue+120)%360) + "," + sat + "%," + light + "%"));
+                    var newHexInput1 = this.rgbToHEX(this.hslToRGB(((hue + 120) % 360) + "," + sat + "%," + light + "%"));
+                    var newHexinput2 = this.rgbToHEX(this.hslToRGB((newHue + "," + sat + "%," + light + "%")));
+                    var newHexinput3 = this.rgbToHEX(this.hslToRGB(((newHue + 120) % 360) + "," + sat + "%," + light + "%"));
                     var tetradicScheme = [newHexInput1, newHexinput2, newHexinput3];
                     return tetradicScheme
                 },
@@ -834,9 +878,9 @@
                     var hue = parseInt(hslInput.split(",")[0], 10);
                     var sat = parseInt(hslInput.split(",")[1].slice(0, -1), 10);
                     var light = parseInt(hslInput.split(",")[2].slice(0, -1), 10);
-                    var newHexInput1 = this.rgbToHEX(this.hslToRGB(((hue+90)%360) + "," + sat + "%," + light + "%"));
-                    var newHexinput2 = this.rgbToHEX(this.hslToRGB(((hue+180)%360) + "," + sat + "%," + light + "%"));
-                    var newHexinput3 = this.rgbToHEX(this.hslToRGB(((hue+270)%360) + "," + sat + "%," + light + "%"));
+                    var newHexInput1 = this.rgbToHEX(this.hslToRGB(((hue + 90) % 360) + "," + sat + "%," + light + "%"));
+                    var newHexinput2 = this.rgbToHEX(this.hslToRGB(((hue + 180) % 360) + "," + sat + "%," + light + "%"));
+                    var newHexinput3 = this.rgbToHEX(this.hslToRGB(((hue + 270) % 360) + "," + sat + "%," + light + "%"));
                     var tetradicScheme = [newHexInput1, newHexinput2, newHexinput3];
                     return tetradicScheme
                 },
@@ -968,6 +1012,55 @@
         })
     </script>
 
+    <!--Font Comparer Vue-->
+    <script>
+        var fontCompare = new Vue({
+            el: "#fontComparer",
+            data: {
+                font1Input: "Open Sans",
+                font2Input: "Roboto",
+                fontList: { "items": [{ "family": "Open Sans" }, { "family": "Roboto" }] },
+                fontChar: "AaBbCc"
+            },
+            mounted() {
+                this.loadFontList();
+            },
+            computed: {
+                getFont1() {
+                    this.changeFont()
+                    return this.font1Input
+                },
+
+                getFont2() {
+                    this.changeFont()
+                    return this.font2Input
+                }
+            },
+            methods: {
+                changeFont: function () {
+                    WebFont.load({
+                        google: {
+                            families: [this.font1Input, this.font2Input]
+                        }
+                    });
+                },
+
+                loadFontList: function () {
+                    var _this = this;
+                    var fontsURL = "https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyDwQX5Nd_fgoFDUBSdWGN0BHk1FmvXRyjA&sort=alpha";
+                    let xhr = new XMLHttpRequest();
+                    xhr.open("GET", fontsURL);
+                    xhr.onload = () => {
+                        const data = JSON.parse(xhr.response);
+                        _this.fontList = data;
+                        console.log("fontList changed");
+                    };
+                    xhr.send();
+                }
+            }
+        })
+    </script>
+
 </body>
 
 <footer class="footer">
@@ -1037,7 +1130,6 @@
             const app = new Vue(donate)
             app.$mount('#donateButtons')
         </script>
-
 
     </div>
 </footer>
