@@ -8,6 +8,7 @@ You can access the website via: [https://troyanovsky.github.io/UXerToolbox/](htt
  - [Buefy](https://buefy.org/): UI components for Vue.js based on Bulma
  - [Vue.js](https://vuejs.org/): JavaScript framework
  - [Webfont Loader](https://github.com/typekit/webfontloader): JavaScript library to load Google Fonts
+ - [Color Thief](https://lokeshdhakar.com/projects/color-thief/): JavaScript library to extract color palette from images
 
 ## Current Tools
 Currently, there are four tools that I've created: Color Converter, Color Mixer (Gradient), Color Scheme Generator, and Font Comparer.
@@ -43,3 +44,8 @@ Currently, there are four tools that I've created: Color Converter, Color Mixer 
 
  - Allows users to choose two fonts available from [Google Fonts](https://fonts.google.com/) and display some user-inputted characters side-by-side.
  - Uses webfont loader to dynamically load chosen fonts from Google Fonts.
+
+**Palette Extractor**
+
+ - Allows users to upload an image and extract a color palette with 10 colors from it.
+ - The image is not saved anywhere.
