@@ -15,6 +15,7 @@
     <script src="https://unpkg.com/buefy/dist/buefy.min.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-145887669-2"></script>
     <script>
@@ -56,6 +57,7 @@
                                     Mixer (Gradient)</button>
                                 <button class="button is-rounded" onclick="scrollToView('colorSchemes')">Color Scheme
                                     Generator</button>
+                                    <button class="button is-rounded" onclick="scrollToView('paletteExtractor')">Palette Extractor</button>
                             </div>
                             <div class="buttons is-centered">
                                 <button class="button is-rounded" onclick="scrollToView('fontComparer')">Font
@@ -246,40 +248,96 @@
     </section>
 
     <!--Font Comparer-->
-    <section class="hero is-fullheight has-background-light" id="fontComparer">
-        <div class="hero-body">
-            <div class="container">
-                <h2 class="title has-text-centered">Font Comparer</h2>
-                <div class="columns">
-                    <div class="column is-one-third"></div>
-                    <div class="column is-one-third">
-                        <b-field label="Type characters to compare:">
-                            <b-input v-model="fontChar" minlength="1" maxlength="6" required placeholder="AaBbCc">
-                            </b-input>
-                        </b-field>
-                        <div class="columns">
-                            <div class="column is-half">
-                                <h3 class="subtitle has-text-centered has-text-weight-bold">Font 1</h3>
-                                <b-select placeholder="Open Sans" v-model="font1Input" v-on:input="changeFont"
-                                    expanded="true">
-                                    <option v-for="font in fontList.items">{{font.family}}</option>
-                                </b-select>
-                                <p class="has-text-centered is-size-3" v-bind:style="{ 'font-family': getFont1 }">
-                                    {{fontChar}}</p>
+    <section>
+        <div class="hero is-fullheight has-background-light" id="fontComparer">
+            <div class="hero-body">
+                <div class="container">
+                    <h2 class="title has-text-centered">Font Comparer</h2>
+                    <div class="columns">
+                        <div class="column is-one-third"></div>
+                        <div class="column is-one-third">
+                            <b-field label="Type characters to compare:">
+                                <b-input v-model="fontChar" minlength="1" maxlength="6" required placeholder="AaBbCc">
+                                </b-input>
+                            </b-field>
+                            <div class="columns">
+                                <div class="column is-half">
+                                    <h3 class="subtitle has-text-centered has-text-weight-bold">Font 1</h3>
+                                    <b-select placeholder="Open Sans" v-model="font1Input" v-on:input="changeFont"
+                                        expanded="true">
+                                        <option v-for="font in fontList.items">{{font.family}}</option>
+                                    </b-select>
+                                    <p class="has-text-centered is-size-3" v-bind:style="{ 'font-family': getFont1 }">
+                                        {{fontChar}}</p>
+                                </div>
+                                <div class="column is-half">
+                                    <h3 class="subtitle has-text-centered has-text-weight-bold">Font 2</h3>
+                                    <b-select placeholder="Roboto" v-model="font2Input" expanded="true">
+                                        <option v-for="font in fontList.items">{{font.family}}</option>
+                                    </b-select>
+                                    <p class="has-text-centered is-size-3" v-bind:style="{ 'font-family': getFont2 }">
+                                        {{fontChar}}</p>
+                                </div>
                             </div>
-                            <div class="column is-half">
-                                <h3 class="subtitle has-text-centered has-text-weight-bold">Font 2</h3>
-                                <b-select placeholder="Roboto" v-model="font2Input" expanded="true">
-                                    <option v-for="font in fontList.items">{{font.family}}</option>
-                                </b-select>
-                                <p class="has-text-centered is-size-3" v-bind:style="{ 'font-family': getFont2 }">
-                                    {{fontChar}}</p>
-                            </div>
+                            <p class="is-size-7">* Supports fonts from <a href="https://fonts.google.com/"
+                                    target="_blank">Google Fonts</a></p>
                         </div>
-                        <p class="is-size-7">* Supports fonts from <a href="https://fonts.google.com/"
-                                target="_blank">Google Fonts</a></p>
+                        <div class="column is-one-third"></div>
                     </div>
-                    <div class="column is-one-third"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--Palette Extractor-->
+    <section>
+        <div class="hero is-fullheight" id="paletteExtractor">
+            <div class="hero-body">
+                <div class="container">
+                    <h2 class="title has-text-centered">Palette Extractor</h2>
+                    <p class="has-text-centered">This tool allows you to extract a color palette from an image.</p>
+                    <div class="columns has-text-centered">
+                        <div class="column is-one-third"></div>
+                        <div class="column is-one-third">
+                            <h3 class="subtitle has-text-centered"></br>Pick an image:</h3>
+                            <div class="level">
+                                <div class="level-item">
+                                    <b-field class="file">
+                                        <b-upload v-model="file">
+                                            <a class="button is-primary">
+                                                <i class="fas fa-upload"></i>
+                                                <span>Click to upload</span>
+                                            </a>
+                                        </b-upload>
+                                        <span class="file-name" v-if="file">
+                                            {{ file.name }}
+                                        </span>
+                                    </b-field>
+                                </div>
+                            </div>
+                            <div class="columns has-text-centered is-vcentered">
+                                <div class="column">
+                                    <figure class="image is-480x480">
+                                        <img v-bind:src="uploadedImg" alt="Uploaded Image" v-show="uploadedImg"
+                                            id="uploadedImage">
+                                    </figure>
+                                </div>
+                                <div class="column">
+                                    <div class="container">
+                                        <b-button rounded v-on:click="getColors()" v-show="uploadedImg">Get Colors
+                                        </b-button>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="buttons has-text-centered">
+                                <div class="button has-tooltip-arrow" v-for="color in colors"
+                                    v-bind:style="{ backgroundColor: color}"
+                                    v-on:click="copyColor(color)" data-tooltip="Click to Copy">
+                                    {{color}}</div>
+                        </div>
+                        <div class="column is-one-third"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1084,6 +1142,90 @@
                         console.log("fontList changed");
                     };
                     xhr.send();
+                }
+            }
+        })
+    </script>
+
+    <!--Palette Extractor Vue-->
+    <script>
+        var paletteExtract = new Vue({
+            el: "#paletteExtractor",
+            data: {
+                file: null,
+                colors: [],
+                uploadedImg: null
+            },
+
+            watch: {
+                file: function (newFile) {
+                    const _this = this
+                    if (newFile !== null) {
+                        const fileType = newFile['type'];
+                        const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+                        if (validImageTypes.includes(fileType)) {
+                            const reader = new FileReader();
+                            reader.onload = function fileReadCompleted() {
+                                _this.uploadedImg = reader.result;
+                                _this.colors = [];
+                            };
+                            reader.readAsDataURL(newFile);
+                        }
+                    }
+                }
+            },
+
+            methods: {
+                getColors: function () {
+                    const _this = this;
+                    const colorThief = new ColorThief();
+                    const img = document.querySelector('#uploadedImage');
+                    // Make sure image is finished loading
+                    if (img.complete) {
+                        _this.colors = _this.paletteToHex(colorThief.getPalette(img));
+                    } else {
+                        image.addEventListener('load', function () {
+                            _this.colors = _this.paletteToHex(colorThief.getPalette(img));
+                        });
+                    }
+                },
+
+                paletteToHex: function (palette) {
+                    var hexPalette = [];
+                    for (var i=0; i < palette.length; i++) {
+                        let r = palette[i][0];
+                        let g = palette[i][1];
+                        let b = palette[i][2];
+                        hexPalette.push(this.rgbToHEX(r,g,b))
+                    }
+                    return hexPalette
+                },
+
+                rgbToHEX: function (r,g,b) {
+                    var hexR = r.toString(16);
+                    if (hexR.length == 1) {
+                        hexR = hexR + hexR;
+                    }
+                    var hexG = g.toString(16);
+                    if (hexG.length == 1) {
+                        hexG = hexG + hexG;
+                    }
+                    var hexB = b.toString(16);
+                    if (hexB.length == 1) {
+                        hexB = hexB + hexB;
+                    }
+                    var hexInput = "#" + hexR + hexG + hexB;
+                    return hexInput
+                },
+
+                copyColor: function (colorToCopy) {
+                    navigator.clipboard.writeText(colorToCopy)
+                        .then(() => {
+                            // Success!
+                        })
+                        .catch(err => {
+                            console.log('Something went wrong', err);
+                        });
                 }
             }
         })
