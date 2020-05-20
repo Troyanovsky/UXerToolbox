@@ -49,3 +49,13 @@ Currently, there are four tools that I've created: Color Converter, Color Mixer 
 
  - Allows users to upload an image and extract a color palette with 10 colors from it.
  - The image is not saved anywhere.
+ 
+ **Lorem Ipsum Generator**
+
+ - Allows users to generate lorem ipsum dummy texts.
+ - Has 5 different generators, including:
+ 	- Lorem Ipsum: The classic lorem ipsum generator, using [loripsum.net](https://loripsum.net/)
+	- Literature Ipsum: Random text from The Adventures of Sherlock Holmes, Dr Jekyll and Mr Hyde, Dracula, Evelina, The Life of Samuel Johnson, The Picture of Dorian Gray, and Pride and Prejudice; uses [litipsum](https://litipsum.com/)
+	- Bacon Ipsum: Random meaty words; uses [bacon ipsum](https://baconipsum.com/)
+	- Dino Ipsum: Random dinosaur names; uses [dino ipsum](http://dinoipsum.herokuapp.com/)
+	- Metaphor Ipsum: A wise– if perhaps slightly pedantic– generator of metaphor; uses [metaphorpsum](http://metaphorpsum.com/)
