@@ -57,11 +57,15 @@
                                     Mixer (Gradient)</button>
                                 <button class="button is-rounded" onclick="scrollToView('colorSchemes')">Color Scheme
                                     Generator</button>
-                                    <button class="button is-rounded" onclick="scrollToView('paletteExtractor')">Palette Extractor</button>
+                                <button class="button is-rounded" onclick="scrollToView('paletteExtractor')">Palette
+                                    Extractor</button>
                             </div>
                             <div class="buttons is-centered">
                                 <button class="button is-rounded" onclick="scrollToView('fontComparer')">Font
                                     Comparer</button>
+                            </div>
+                            <div class="buttons is-centered">
+                                <button class="button is-rounded" onclick="scrollToView('loremIpsumGenerator')">Lorem Ipsum Generator</button>
                             </div>
                         </div>
                         <div class="column is-one-third"></div>
@@ -333,9 +337,57 @@
                             </div>
                             <div class="buttons has-text-centered">
                                 <div class="button has-tooltip-arrow" v-for="color in colors"
-                                    v-bind:style="{ backgroundColor: color}"
-                                    v-on:click="copyColor(color)" data-tooltip="Click to Copy">
+                                    v-bind:style="{ backgroundColor: color}" v-on:click="copyColor(color)"
+                                    data-tooltip="Click to Copy">
                                     {{color}}</div>
+                            </div>
+                            <div class="column is-one-third"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
+
+    <!--Lorem Ipsum Generator-->
+    <section>
+        <div class="hero is-fullheight has-background-light" id="loremIpsumGenerator">
+            <div class="hero-body">
+                <div class="container">
+                    <h2 class="title has-text-centered">Lorem Ipsum Generator</h2>
+                    <div class="columns">
+                        <div class="column is-one-third"></div>
+                        <div class="column is-one-third">
+                            <b-field label="Generator">
+                                <b-select placeholder="Select a generator" expanded v-model="generatorName">
+                                    <option value="loremIpsum">Lorem Ipsum Generator</option>
+                                    <option value="litIpsum">Literature Ipsum Generator</option>
+                                    <option value="baconIpsum">Bacon Ipsum Generator</option>
+                                    <option value="dinoIpsum">Dino Ipsum Generator</option>
+                                    <option value="metaphorIpsum">Metaphor Ipsum Generator</option>
+                                </b-select>
+                            </b-field>
+                            <p class="is-size-7">* If a generator does not work, try another one.</p>
+                            <p></br></p>
+                            <b-field label="Number of Paragraphs">
+                                <b-slider :min="1" :max="10" ticks v-model="paragraphNumber"></b-slider>
+                            </b-field>
+                            <b-field label="Paragraph Length" v-if="generatorName == 'loremIpsum'">
+                                <div class="block">
+                                    <b-radio v-model="paragraphLength" name="pLength" native-value="short">
+                                        short
+                                    </b-radio>
+                                    <b-radio v-model="paragraphLength" name="pLength" native-value="medium">
+                                        medium
+                                    </b-radio>
+                                    <b-radio v-model="paragraphLength" name="pLength" native-value="long">
+                                        long
+                                    </b-radio>
+                                </div>
+                            </b-field>
+                            <b-button v-on:click="generateIpsum()">Generate Text!</b-button>
+                            <p></br></p>
+                            <textarea class="textarea has-fixed-size" placeholder="Your text will appear here" rows="10"
+                                readonly v-model="generatedText"></textarea>
                         </div>
                         <div class="column is-one-third"></div>
                     </div>
@@ -1193,16 +1245,16 @@
 
                 paletteToHex: function (palette) {
                     var hexPalette = [];
-                    for (var i=0; i < palette.length; i++) {
+                    for (var i = 0; i < palette.length; i++) {
                         let r = palette[i][0];
                         let g = palette[i][1];
                         let b = palette[i][2];
-                        hexPalette.push(this.rgbToHEX(r,g,b))
+                        hexPalette.push(this.rgbToHEX(r, g, b))
                     }
                     return hexPalette
                 },
 
-                rgbToHEX: function (r,g,b) {
+                rgbToHEX: function (r, g, b) {
                     var hexR = r.toString(16);
                     if (hexR.length == 1) {
                         hexR = hexR + hexR;
@@ -1227,6 +1279,52 @@
                         .catch(err => {
                             console.log('Something went wrong', err);
                         });
+                }
+            }
+        })
+    </script>
+
+    <!--Lorem Ipsum Generator Vue-->
+    <script>
+        var liGenerate = new Vue({
+            el: "#loremIpsumGenerator",
+            data: {
+                generatorName: "loremIpsum",
+                paragraphNumber: 5,
+                paragraphLength: "medium",
+                generatedText: "Your text will appear here"
+            },
+            watch: {
+                generatorName(newValue) {
+                    console.log(newValue);
+                }
+            },
+            methods: {
+                generateIpsum: function () {
+                    switch (this.generatorName) {
+                        case "loremIpsum":
+                            var apiURL = "https://cors-anywhere.herokuapp.com/https://loripsum.net/api/plaintext/" + this.paragraphNumber.toString() + "/" + this.paragraphLength;
+                            break;
+                        case "litIpsum":
+                            var apiURL = "https://litipsum.com/api/" + this.paragraphNumber.toString();
+                            break;
+                        case "baconIpsum":
+                            var apiURL = "https://baconipsum.com/api/?type=meat-and-filler&paras=" + this.paragraphNumber.toString() + "&start-with-lorem=1&format=text";
+                            break;
+                        case "dinoIpsum":
+                            var apiURL = "http://dinoipsum.herokuapp.com/api/?format=text&paragraphs=" + this.paragraphNumber.toString();
+                            break;
+                        case "metaphorIpsum":
+                            var apiURL = "https://cors-anywhere.herokuapp.com/http://metaphorpsum.com/paragraphs/" + this.paragraphNumber.toString();
+                            break;
+                    }
+                    const _this = this;
+                    let xhr = new XMLHttpRequest();
+                    xhr.open("GET", apiURL);
+                    xhr.onload = () => {
+                        _this.generatedText = xhr.response;
+                    };
+                    xhr.send();
                 }
             }
         })
