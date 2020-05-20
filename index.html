@@ -67,6 +67,8 @@
                             <div class="buttons is-centered">
                                 <button class="button is-rounded" onclick="scrollToView('loremIpsumGenerator')">Lorem
                                     Ipsum Generator</button>
+                                <button class="button is-rounded" onclick="scrollToView('fakeProfileGenerator')">Fake
+                                    Profile Generator</button>
                             </div>
                         </div>
                         <div class="column is-one-third"></div>
@@ -389,6 +391,70 @@
                             <p></br></p>
                             <textarea class="textarea has-fixed-size" placeholder="Your text will appear here" rows="10"
                                 readonly v-model="generatedText"></textarea>
+                        </div>
+                        <div class="column is-one-third"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--Fake Profile Generator-->
+    <section>
+        <div class="hero is-fullheight" id="fakeProfileGenerator">
+            <div class="hero-body">
+                <div class="container">
+                    <h2 class="title has-text-centered">Fake Profile Generator</h2>
+                    <div class="columns">
+                        <div class="column is-one-third"></div>
+                        <div class="column is-one-third">
+                            <div class="columns">
+                                <div class="column is-half">
+                                    <b-field label="Image Style">
+                                        <b-select placeholder="adorable" expanded v-model="imageStyle"
+                                            v-on:input="generateImage()">
+                                            <option value="adorable">adorable</option>
+                                            <option value="male">pixel male</option>
+                                            <option value="female">pixel female</option>
+                                            <option value="bottts">robot</option>
+                                            <option value="avataaars">avataaars</option>
+                                            <option value="jdenticon">jdenticon</option>
+                                            <option value="identicon">identicon</option>
+                                            <option value="life-like">life-like (AI generated)</option>
+                                        </b-select>
+                                    </b-field>
+                                    <figure class="image is-200x200" v-if="generatedImage">
+                                        <img v-bind:src="generatedImage" v-if="generatedImage">
+                                    </figure>
+                                    <p></br></p>
+                                    <button v-on:click="generateImage()" class="button has-text-centered"
+                                        v-if="imageStyle !== 'life-like'">Regenerate Image</button>
+                                </div>
+                                <div class="column is-half">
+                                    <b-button v-on:click="generateProfile()"
+                                        v-bind:class="{'is-loading': isLoadingProfile}">Generate
+                                        Profile</b-button>
+                                    <p></br></p>
+                                    <div v-if="person">
+                                        <p><b>Name: </b></br>{{ person.person.personal.name }}
+                                            {{ person.person.personal.last_name }}</p>
+                                        <p><b>Gender: </b></br>{{ person.person.personal.gender }}</p>
+                                        <p><b>Height: </b></br>{{ person.person.personal.height }} m</p>
+                                        <p><b>Weight: </b></br>{{ person.person.personal.weight }} kg</p>
+                                        <p><b>Born City: </b></br>{{ person.person.personal.born_place }}</p>
+                                        <p><b>Current Country: </b></br>{{ person.person.personal.country }}</p>
+                                        <p><b>Education: </b></br>{{ person.person.education.certificate }},
+                                            {{ person.person.education.university }}</p>
+                                        <p><b>Position: </b></br>{{ person.person.work.position }}</p>
+                                        <p><b>Salary: </b></br>{{ person.person.work.salary }}</p>
+                                        <p><b>Cellphone: </b></br>{{ person.person.personal.cellphone }}</p>
+                                        <p><b>Email: </b></br>{{ person.person.online_info.email }}</p>
+                                        <p><b>IP Address: </b></br>{{ person.person.online_info.ip_address }}</p>
+                                        <p class="is-size-7">* These are randomly generated fake info.</p>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
                         <div class="column is-one-third"></div>
                     </div>
@@ -1331,6 +1397,49 @@
         })
     </script>
 
+    <!--Fake Profile Generator Vue-->
+    <script>
+        var fpGenerate = new Vue({
+            el: "#fakeProfileGenerator",
+            data: {
+                person: null,
+                generatedImage: "https://api.adorable.io/avatars/200/abott@adorable.png",
+                imageStyle: "adorable",
+                isLoadingProfile: false
+            },
+            methods: {
+                generateProfile: function () {
+                    this.isLoadingProfile = true;
+                    var apiURL = "https://cors-anywhere.herokuapp.com/https://pipl.ir/v1/getPerson";
+                    console.log("generate profile");
+                    const _this = this;
+                    let xhr = new XMLHttpRequest();
+                    xhr.open("GET", apiURL);
+                    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+                    xhr.onload = () => {
+                        const data = JSON.parse(xhr.response);
+                        _this.person = data;
+                        _this.isLoadingProfile = false;
+                    };
+                    xhr.send();
+                },
+
+                generateImage: function () {
+                    switch (this.imageStyle) {
+                        case "adorable":
+                            this.generatedImage = "https://api.adorable.io/avatars/200/" + Math.floor(Math.random() * 1000) + ".png";
+                            break;
+                        case "life-like":
+                            this.generatedImage = "https://thispersondoesnotexist.com/image";
+                            break;
+                        default:
+                            this.generatedImage = "https://avatars.dicebear.com/api/" + this.imageStyle + "/" + Math.floor(Math.random() * 1000) + ".svg?w=200&h=200";
+                    }
+                }
+            }
+        })
+    </script>
+
 </body>
 
 <footer class="footer">
@@ -1386,7 +1495,6 @@
                 </div>
             </b-modal>
         </div>
-
 
         <a href="https://bulma.io">
             <img src="https://bulma.io/images/made-with-bulma.png" alt="Made with Bulma" width="128" height="24">
