@@ -9,6 +9,7 @@ You can access the website via: [https://troyanovsky.github.io/UXerToolbox/](htt
  - [Vue.js](https://vuejs.org/): JavaScript framework
  - [Webfont Loader](https://github.com/typekit/webfontloader): JavaScript library to load Google Fonts
  - [Color Thief](https://lokeshdhakar.com/projects/color-thief/): JavaScript library to extract color palette from images
+ Other API's used are in the detailed tool descriptions.
 
 ## Current Tools
 Currently, there are four tools that I've created: Color Converter, Color Mixer (Gradient), Color Scheme Generator, and Font Comparer.
@@ -59,3 +60,8 @@ Currently, there are four tools that I've created: Color Converter, Color Mixer 
 	- Bacon Ipsum: Random meaty words; uses [bacon ipsum](https://baconipsum.com/)
 	- Dino Ipsum: Random dinosaur names; uses [dino ipsum](http://dinoipsum.herokuapp.com/)
 	- Metaphor Ipsum: A wise– if perhaps slightly pedantic– generator of metaphor; uses [metaphorpsum](http://metaphorpsum.com/)
+
+**Fake Profile Generator**
+
+ - Allows users to generate a fake profile with a picture and personal info.
+ - For profile picture, there are 8 choices: [adorable](http://avatars.adorable.io/), [pixel male, pixel female, robot, avataaars, jdenticon, identicon](https://avatars.dicebear.com/), and [life-like](https://thispersondoesnotexist.com/). 
