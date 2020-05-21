@@ -34,6 +34,14 @@
             right: 30px;
             z-index: 99;
         }
+        
+        .colorDisplay {
+            outline: 1px dashed black;
+        }
+
+        .contrastDisplay {
+            outline: 2px dashed #1c5e9a;
+        }
     </style>
 </head>
 
@@ -59,6 +67,9 @@
                                     Generator</button>
                                 <button class="button is-rounded" onclick="scrollToView('paletteExtractor')">Palette
                                     Extractor</button>
+                            </div>
+                            <div class="buttons is-centered">
+                                <button class="button is-rounded" onclick="scrollToView('contrastChecker')">Contrast Checker</button>
                             </div>
                             <div class="buttons is-centered">
                                 <button class="button is-rounded" onclick="scrollToView('fontComparer')">Font
@@ -246,6 +257,90 @@
                                 v-bind:style="{backgroundColor: squareScheme[2]}" data-tooltip="Click to Copy"
                                 v-on:click="copyColor(squareScheme[2])">{{squareScheme[2]}}</span>
 
+                        </div>
+                        <div class="column is-one-third"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--Contrast Checker-->
+    <section>
+        <div class="hero is-fullheight" id="contrastChecker">
+            <div class="hero-body">
+                <div class="container">
+                    <h2 class="title has-text-centered">Contrast Checker</h2>
+                    <div class="columns">
+                        <div class="column is-one-third"></div>
+                        <div class="column is-one-third has-text-centered">
+                            <div class="columns">
+                                <div class="column">
+                                    <b-field label="Foreground Color(Hex)">
+                                        <b-input v-model="fgInput"></b-input>
+                                    </b-field>
+                                    <div class="colorDisplay" v-bind:style="{backgroundColor: fgInput}">&nbsp;</div>
+                                </div>
+                                <div class="column">
+                                    <b-field label="Background Color(Hex)">
+                                        <b-input v-model="bgInput"></b-input>
+                                    </b-field>
+                                    <div class="colorDisplay" v-bind:style="{backgroundColor: bgInput}">&nbsp;</div>
+                                </div>
+                            </div>
+                            <div class="contrastDisplay">
+                                <h3 class="is-size-4"><b>Contrast Ratio</b></h3>
+                                <p class="is-size-4">{{ contrastRatio }}:1</p>
+                            </div>
+                            <div>
+                                <h3 class="is-size-5"><b>WCAG Level AA</b></h3>
+                                <div class="columns">
+                                    <div class="column">
+                                        <p><b>Normal Text</b></p>
+                                    </div>
+                                    <div class="column">
+                                        <span class="tag is-success has-tooltip-arrow" v-if="normalAA == 'PASSED'"
+                                            data-tooltip="At least 4.5:1 for normal text under WCAG level AA">{{ normalAA }}</span>
+                                        <span class="tag is-danger has-tooltip-arrow" v-if="normalAA == 'FAILED'"
+                                            data-tooltip="At least 4.5:1 for normal text under WCAG level AA">{{ normalAA }}</span>
+                                    </div>
+                                    <div class="column">
+                                        <p><b>Large Text</b></p>
+                                    </div>
+                                    <div class="column">
+                                        <span class="tag is-success has-tooltip-arrow" v-if="largeAA == 'PASSED'"
+                                            data-tooltip="At least 3:1 for large text under WCAG level AA">{{ largeAA }}</span>
+                                        <span class="tag is-danger has-tooltip-arrow" v-if="largeAA == 'FAILED'"
+                                            data-tooltip="At least 3:1 for large text under WCAG level AA">{{ largeAA }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="is-size-5"><b>WCAG Level AAA</b></h3>
+                                <div class="columns">
+                                    <div class="column">
+                                        <p><b>Normal Text</b></p>
+                                    </div>
+                                    <div class="column">
+                                        <span class="tag is-success has-tooltip-arrow" v-if="normalAAA == 'PASSED'"
+                                            data-tooltip="At least 7:1 for normal text under WCAG level AAA">{{ normalAAA }}</span>
+                                        <span class="tag is-danger has-tooltip-arrow" v-if="normalAAA == 'FAILED'"
+                                            data-tooltip="At least 7:1 for normal text under WCAG level AAA">{{ normalAAA }}</span>
+                                    </div>
+                                    <div class="column">
+                                        <p><b>Large Text</b></p>
+                                    </div>
+                                    <div class="column">
+                                        <span class="tag is-success has-tooltip-arrow" v-if="largeAAA == 'PASSED'"
+                                            data-tooltip="At least 4.5:1 for large text under WCAG level AAA">{{ largeAAA }}</span>
+                                        <span class="tag is-danger has-tooltip-arrow" v-if="largeAAA == 'FAILED'"
+                                            data-tooltip="At least 4.5:1 for large text under WCAG level AAA">{{ largeAAA }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="is-size-7"><a
+                                    href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html"
+                                    target="_blank">* Learn more about color contrast accessibility </a></p>
                         </div>
                         <div class="column is-one-third"></div>
                     </div>
@@ -1218,6 +1313,111 @@
         })
     </script>
 
+    <!--Contrast Checker Vue-->
+    <script>
+        var contrastCheck = new Vue({
+            el: "#contrastChecker",
+            data: {
+                fgInput: "#FFFFFF",
+                bgInput: "#000000",
+            },
+            computed: {
+                fgLuminance: function () {
+                    return this.calculateLuminance(this.fgInput)
+                },
+
+                bgLuminance: function () {
+                    return this.calculateLuminance(this.bgInput)
+                },
+
+                contrastRatio: function () {
+                    var l1, l2, rl
+                    l1 = Math.max(this.fgLuminance, this.bgLuminance);
+                    l2 = Math.min(this.fgLuminance, this.bgLuminance);
+                    // formula from https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html
+                    rl = (l1 + 0.05) / (l2 + 0.05);
+                    if (Number.isInteger(rl)) {
+                        return rl
+                    } else {
+                        return rl.toFixed(2)
+                    }
+                },
+
+                normalAA: function () {
+                    if (this.contrastRatio >= 4.5) {
+                        return "PASSED"
+                    } else {
+                        return "FAILED"
+                    }
+                },
+
+                largeAA: function () {
+                    if (this.contrastRatio >= 3) {
+                        return "PASSED"
+                    } else {
+                        return "FAILED"
+                    }
+                },
+
+                normalAAA: function () {
+                    if (this.contrastRatio >= 7) {
+                        return "PASSED"
+                    } else {
+                        return "FAILED"
+                    }
+                },
+
+                largeAAA: function () {
+                    if (this.contrastRatio >= 4.5) {
+                        return "PASSED"
+                    } else {
+                        return "FAILED"
+                    }
+                },
+            },
+            methods: {
+                calculateLuminance: function (hexInput) {
+                    // formula from https://www.w3.org/TR/WCAG20/#relativeluminancedef
+                    var rgb8 = this.hexToRGB(hexInput);
+                    var rgbS = [];
+                    for (let i = 0; i < rgb8.length; i++) {
+                        rgbS.push(rgb8[i] / 255);
+                    }
+                    var rgbL = [];
+                    for (let i = 0; i < rgbS.length; i++) {
+                        if (rgbS[i] <= 0.03928) {
+                            rgbL.push(rgbS[i] / 12.92);
+                        } else {
+                            rgbL.push(((rgbS[i] + 0.055) / 1.055) ** (2.4));
+                        }
+                    }
+                    var L = 0.2126 * rgbL[0] + 0.7152 * rgbL[1] + 0.0722 * rgbL[2];
+                    return L
+                },
+
+                hexToRGB: function (hexInput) {
+                    /* Check for # in front of the value, if it's there, strip it */
+                    if (hexInput.substring(0, 1) == '#') {
+                        hexInput = hexInput.substring(1);
+                    }
+
+                    /* conver hex values to decimals*/
+                    if (hexInput.length == 3) {
+                        var r = parseInt(hexInput.charAt(0) + hexInput.charAt(0), 16);
+                        var g = parseInt(hexInput.charAt(1) + hexInput.charAt(1), 16);
+                        var b = parseInt(hexInput.charAt(2) + hexInput.charAt(2), 16);
+                    } else {
+                        var r = parseInt(hexInput.substring(0, 2), 16);
+                        var g = parseInt(hexInput.substring(2, 4), 16);
+                        var b = parseInt(hexInput.substring(4), 16);
+                    }
+
+                    return [r, g, b];
+                },
+            }
+        })
+    </script>
+
     <!--Font Comparer Vue-->
     <script>
         var fontCompare = new Vue({
@@ -1410,8 +1610,11 @@
             methods: {
                 generateProfile: function () {
                     this.isLoadingProfile = true;
-                    var apiURL = "https://cors-anywhere.herokuapp.com/https://pipl.ir/v1/getPerson";
-                    console.log("generate profile");
+                    var apiURL = "https://cors-anywhere.herokuapp.com/https://pipl.ir/v1/getPerson"; // backup api:  'https://randomuser.me/api/'
+                    this.sendXHR(apiURL);
+                },
+
+                sendXHR: function(apiURL) {
                     const _this = this;
                     let xhr = new XMLHttpRequest();
                     xhr.open("GET", apiURL);
