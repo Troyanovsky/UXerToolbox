@@ -12,7 +12,7 @@ You can access the website via: [https://troyanovsky.github.io/UXerToolbox/](htt
  Other API's used are in the detailed tool descriptions.
 
 ## Current Tools
-Currently, there are four tools that I've created: Color Converter, Color Mixer (Gradient), Color Scheme Generator, and Font Comparer.
+Currently, there are four tools that I've created: Color Converter, Color Mixer (Gradient), Color Scheme Generator, Palette Extractor, Contrast Checker, Font Comparer, Lorem Ipsum Generator, and Fake Profile Generator.
 
 **Color Converter**
 
@@ -41,16 +41,19 @@ Currently, there are four tools that I've created: Color Converter, Color Mixer 
  - User can copy a color by clicking on the tags generated.
  - User input is saved locally using localStorage.
 
+**Palette Extractor**
+
+ - Allows users to upload an image and extract a color palette with 10 colors from it.
+ - The image is not saved anywhere.
+
+**Contrast Checker**
+ - Allows users to input two colors with hex codes and computes the contrast ratio and checks it against WCAG (Web Content Accessibility Guidelines)[https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html] levels AA and AAA.
+
 **Font Comparer**
 
  - Allows users to choose two fonts available from [Google Fonts](https://fonts.google.com/) and display some user-inputted characters side-by-side.
  - Uses webfont loader to dynamically load chosen fonts from Google Fonts.
 
-**Palette Extractor**
-
- - Allows users to upload an image and extract a color palette with 10 colors from it.
- - The image is not saved anywhere.
- 
  **Lorem Ipsum Generator**
 
  - Allows users to generate lorem ipsum dummy texts.
