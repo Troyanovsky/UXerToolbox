@@ -34,7 +34,7 @@
             right: 30px;
             z-index: 99;
         }
-        
+
         .colorDisplay {
             outline: 1px dashed black;
         }
@@ -57,7 +57,8 @@
                     <div class="columns">
                         <div class="column is-one-third"></div>
                         <div class="column is-one-third">
-                            <h1 class="title has-text-centered">Welcome!</br>Here's my collection of useful tools for UXers</h1>
+                            <h1 class="title has-text-centered">Welcome!</br>Here's my collection of useful tools for
+                                UXers</h1>
                             <div class="buttons is-centered">
                                 <button class="button is-rounded" onclick="scrollToView('colorConverter')">Color
                                     Converter</button>
@@ -69,7 +70,8 @@
                                     Extractor</button>
                             </div>
                             <div class="buttons is-centered">
-                                <button class="button is-rounded" onclick="scrollToView('contrastChecker')">Contrast Checker</button>
+                                <button class="button is-rounded" onclick="scrollToView('contrastChecker')">Contrast
+                                    Checker</button>
                             </div>
                             <div class="buttons is-centered">
                                 <button class="button is-rounded" onclick="scrollToView('fontComparer')">Font
@@ -265,6 +267,61 @@
         </div>
     </section>
 
+    <!--Palette Extractor-->
+    <section>
+        <div class="hero is-fullheight has-background-light" id="paletteExtractor">
+            <div class="hero-body">
+                <div class="container">
+                    <h2 class="title has-text-centered">Palette Extractor</h2>
+                    <p class="has-text-centered">This tool allows you to extract a color palette from an image.</p>
+                    <p class="is-size-7 has-text-centered">You can also try uploading a screenshot of a website.</p>
+                    <div class="columns has-text-centered">
+                        <div class="column is-one-third"></div>
+                        <div class="column is-one-third">
+                            <h3 class="subtitle has-text-centered"></br>Pick an image:</h3>
+                            <div class="level">
+                                <div class="level-item">
+                                    <b-field class="file">
+                                        <b-upload v-model="file">
+                                            <a class="button is-primary">
+                                                <i class="fas fa-upload"></i>
+                                                <span>Click to upload</span>
+                                            </a>
+                                        </b-upload>
+                                        <span class="file-name" v-if="file">
+                                            {{ file.name }}
+                                        </span>
+                                    </b-field>
+                                </div>
+                            </div>
+                            <div class="columns has-text-centered is-vcentered">
+                                <div class="column">
+                                    <figure class="image is-480x480">
+                                        <img v-bind:src="uploadedImg" alt="Uploaded Image" v-show="uploadedImg"
+                                            id="uploadedImage">
+                                    </figure>
+                                </div>
+                                <div class="column">
+                                    <div class="container">
+                                        <b-button rounded v-on:click="getColors()" v-show="uploadedImg">Get Colors
+                                        </b-button>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="buttons has-text-centered">
+                                <div class="button has-tooltip-arrow" v-for="color in colors"
+                                    v-bind:style="{ backgroundColor: color}" v-on:click="copyColor(color)"
+                                    data-tooltip="Click to Copy">
+                                    {{color}}</div>
+                            </div>
+                            <div class="column is-one-third"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
+
     <!--Contrast Checker-->
     <section>
         <div class="hero is-fullheight" id="contrastChecker">
@@ -391,64 +448,9 @@
         </div>
     </section>
 
-    <!--Palette Extractor-->
-    <section>
-        <div class="hero is-fullheight" id="paletteExtractor">
-            <div class="hero-body">
-                <div class="container">
-                    <h2 class="title has-text-centered">Palette Extractor</h2>
-                    <p class="has-text-centered">This tool allows you to extract a color palette from an image.</p>
-                    <p class="is-size-7 has-text-centered">You can also try uploading a screenshot of a website.</p>
-                    <div class="columns has-text-centered">
-                        <div class="column is-one-third"></div>
-                        <div class="column is-one-third">
-                            <h3 class="subtitle has-text-centered"></br>Pick an image:</h3>
-                            <div class="level">
-                                <div class="level-item">
-                                    <b-field class="file">
-                                        <b-upload v-model="file">
-                                            <a class="button is-primary">
-                                                <i class="fas fa-upload"></i>
-                                                <span>Click to upload</span>
-                                            </a>
-                                        </b-upload>
-                                        <span class="file-name" v-if="file">
-                                            {{ file.name }}
-                                        </span>
-                                    </b-field>
-                                </div>
-                            </div>
-                            <div class="columns has-text-centered is-vcentered">
-                                <div class="column">
-                                    <figure class="image is-480x480">
-                                        <img v-bind:src="uploadedImg" alt="Uploaded Image" v-show="uploadedImg"
-                                            id="uploadedImage">
-                                    </figure>
-                                </div>
-                                <div class="column">
-                                    <div class="container">
-                                        <b-button rounded v-on:click="getColors()" v-show="uploadedImg">Get Colors
-                                        </b-button>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="buttons has-text-centered">
-                                <div class="button has-tooltip-arrow" v-for="color in colors"
-                                    v-bind:style="{ backgroundColor: color}" v-on:click="copyColor(color)"
-                                    data-tooltip="Click to Copy">
-                                    {{color}}</div>
-                            </div>
-                            <div class="column is-one-third"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-    </section>
-
     <!--Lorem Ipsum Generator-->
     <section>
-        <div class="hero is-fullheight has-background-light" id="loremIpsumGenerator">
+        <div class="hero is-fullheight" id="loremIpsumGenerator">
             <div class="hero-body">
                 <div class="container">
                     <h2 class="title has-text-centered">Lorem Ipsum Generator</h2>
@@ -496,7 +498,7 @@
 
     <!--Fake Profile Generator-->
     <section>
-        <div class="hero is-fullheight" id="fakeProfileGenerator">
+        <div class="hero is-fullheight has-background-light" id="fakeProfileGenerator">
             <div class="hero-body">
                 <div class="container">
                     <h2 class="title has-text-centered">Fake Profile Generator</h2>
@@ -1614,7 +1616,7 @@
                     this.sendXHR(apiURL);
                 },
 
-                sendXHR: function(apiURL) {
+                sendXHR: function (apiURL) {
                     const _this = this;
                     let xhr = new XMLHttpRequest();
                     xhr.open("GET", apiURL);
