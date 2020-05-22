@@ -407,7 +407,7 @@
         </div>
     </section>
 
-    <!--Color Blind Simulator-->
+    <!--Color Blindness Simulator-->
     <section>
         <div class="hero is-fullheight has-background-light" id="colorBlindSimulator">
             <div class="hero-body">
@@ -457,7 +457,7 @@
                                 <img v-bind:src="uploadedImg" alt="Uploaded Image"
                                     v-show="(uploadedImg && (colorMode == 'Normal'))" id="uploadedImageForSimulate">
                                 <img v-bind:src="simulatedUrl" alt="Simulated Image"
-                                    v-show="(uploadedImg && (colorMode !== 'Original'))" id="simulatedImage">
+                                    v-show="(uploadedImg && (colorMode !== 'Normal'))" id="simulatedImage">
                             </figure>
                         </div>
                         <div class="column is-one-third"></div>
