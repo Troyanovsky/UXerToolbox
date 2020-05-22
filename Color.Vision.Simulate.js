@@ -55,7 +55,6 @@ Color.Vision.Simulate = function(image, options) {
 	// Apply simulation
 	switch(type) {
 		case "Normal":
-			document.body.appendChild(canvas);
 			return;
 		case "Achromatope":
 			for(var id = 0, length = data.length; id < length; id += 4) {
