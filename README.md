@@ -10,9 +10,10 @@ You can access the website via: [https://troyanovsky.github.io/UXerToolbox/](htt
  - [Webfont Loader](https://github.com/typekit/webfontloader): JavaScript library to load Google Fonts
  - [Color Thief](https://lokeshdhakar.com/projects/color-thief/): JavaScript library to extract color palette from images
  Other API's used are in the detailed tool descriptions.
+ - [Daltonize Color Vision](http://www.daltonize.org/2010/05/javascript-color-vision-library.html?m=1): JavaScript library to simulate how images would look like for individuals with color blindness.
 
 ## Current Tools
-Currently, there are four tools that I've created: Color Converter, Color Mixer (Gradient), Color Scheme Generator, Palette Extractor, Contrast Checker, Font Comparer, Lorem Ipsum Generator, and Fake Profile Generator.
+Currently, there are four tools that I've created: Color Converter, Color Mixer (Gradient), Color Scheme Generator, Palette Extractor, Contrast Checker, Color Blind Simulator, Font Comparer, Lorem Ipsum Generator, and Fake Profile Generator.
 
 **Color Converter**
 
@@ -48,6 +49,11 @@ Currently, there are four tools that I've created: Color Converter, Color Mixer 
 
 **Contrast Checker**
  - Allows users to input two colors with hex codes and computes the contrast ratio and checks it against WCAG (Web Content Accessibility Guidelines)[https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html] levels AA and AAA.
+
+**Color Blind Simulator**
+ - Allows users to upload an image and see how the image might look like for people with different types of color blindness.
+ - This tool can help designers test the color accessibility of their design.
+ - This tools is created based on the [Daltonize JavaScript library](http://www.daltonize.org/2010/05/javascript-color-vision-library.html?m=1). I have made some modifications to the original library.
 
 **Font Comparer**
 
