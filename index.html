@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://unpkg.com/buefy/dist/buefy.min.css">
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/@creativebulma/bulma-tooltip@1.0.2/dist/bulma-tooltip.min.css">
+    <script src="Color.Vision.Simulate.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
     <script src="https://unpkg.com/buefy/dist/buefy.min.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
@@ -72,6 +73,7 @@
                             <div class="buttons is-centered">
                                 <button class="button is-rounded" onclick="scrollToView('contrastChecker')">Contrast
                                     Checker</button>
+                                <button class="button is-rounded" onclick="scrollToView('colorBlindSimulator')">Color Blind Simulator</button>
                             </div>
                             <div class="buttons is-centered">
                                 <button class="button is-rounded" onclick="scrollToView('fontComparer')">Font
@@ -306,7 +308,6 @@
                                         <b-button rounded v-on:click="getColors()" v-show="uploadedImg">Get Colors
                                         </b-button>
                                     </div>
-
                                 </div>
                             </div>
                             <div class="buttons has-text-centered">
@@ -406,9 +407,69 @@
         </div>
     </section>
 
+    <!--Color Blind Simulator-->
+    <section>
+        <div class="hero is-fullheight has-background-light" id="colorBlindSimulator">
+            <div class="hero-body">
+                <div class="container">
+                    <h2 class="title has-text-centered">Color Blind Simulator</h2>
+                    <p class="has-text-centered">This tool simulates what an image looks like for people with color
+                        blindness. </br>You can use it to test the color accessibility of your design.</p>
+                    <div class="columns has-text-centered">
+                        <div class="column is-one-third"></div>
+                        <div class="column is-one-third">
+                            <h3 class="subtitle has-text-centered"></br>Pick an image:</h3>
+                            <div class="level">
+                                <div class="level-item">
+                                    <b-field class="file">
+                                        <b-upload v-model="file">
+                                            <a class="button is-primary">
+                                                <i class="fas fa-upload"></i>
+                                                <span>Click to upload</span>
+                                            </a>
+                                        </b-upload>
+                                        <span class="file-name" v-if="file">
+                                            {{ file.name }}
+                                        </span>
+                                    </b-field>
+                                </div>
+                            </div>
+                            <div v-if="uploadedImg">
+                                <div class="block">
+                                    <b-radio v-model="colorMode" name="colorModeRadio" native-value="Normal">
+                                        Normal
+                                    </b-radio>
+                                    <b-radio v-model="colorMode" name="colorModeRadio" native-value="Achromatope">
+                                        Achromatope
+                                    </b-radio>
+                                    <b-radio v-model="colorMode" name="colorModeRadio" native-value="Protanope">
+                                        Protanope
+                                    </b-radio>
+                                    <b-radio v-model="colorMode" name="colorModeRadio" native-value="Deuteranope">
+                                        Deuteranope
+                                    </b-radio>
+                                    <b-radio v-model="colorMode" name="colorModeRadio" native-value="Tritanope">
+                                        Tritanope
+                                    </b-radio>
+                                </div>
+                            </div>
+                            <figure class="image is-480x480">
+                                <img v-bind:src="uploadedImg" alt="Uploaded Image"
+                                    v-show="(uploadedImg && (colorMode == 'Normal'))" id="uploadedImageForSimulate">
+                                <img v-bind:src="simulatedUrl" alt="Simulated Image"
+                                    v-show="(uploadedImg && (colorMode !== 'Original'))" id="simulatedImage">
+                            </figure>
+                        </div>
+                        <div class="column is-one-third"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!--Font Comparer-->
     <section>
-        <div class="hero is-fullheight has-background-light" id="fontComparer">
+        <div class="hero is-fullheight" id="fontComparer">
             <div class="hero-body">
                 <div class="container">
                     <h2 class="title has-text-centered">Font Comparer</h2>
@@ -450,7 +511,7 @@
 
     <!--Lorem Ipsum Generator-->
     <section>
-        <div class="hero is-fullheight" id="loremIpsumGenerator">
+        <div class="hero is-fullheight has-background-light" id="loremIpsumGenerator">
             <div class="hero-body">
                 <div class="container">
                     <h2 class="title has-text-centered">Lorem Ipsum Generator</h2>
@@ -498,7 +559,7 @@
 
     <!--Fake Profile Generator-->
     <section>
-        <div class="hero is-fullheight has-background-light" id="fakeProfileGenerator">
+        <div class="hero is-fullheight" id="fakeProfileGenerator">
             <div class="hero-body">
                 <div class="container">
                     <h2 class="title has-text-centered">Fake Profile Generator</h2>
@@ -1420,6 +1481,56 @@
         })
     </script>
 
+    <!--Color Blind Similator Vue-->
+    <script>
+        var colorBlind = new Vue({
+            el: "#colorBlindSimulator",
+            data: {
+                file: null,
+                uploadedImg: null,
+                colorMode: "Normal",
+                simulatedUrl: null,
+            },
+
+            watch: {
+                file: function (newFile) {
+                    const _this = this
+                    if (newFile !== null) {
+                        const fileType = newFile['type'];
+                        const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+                        if (validImageTypes.includes(fileType)) {
+                            const reader = new FileReader();
+                            reader.onload = function fileReadCompleted() {
+                                _this.uploadedImg = reader.result;
+                                _this.colors = [];
+                            };
+                            reader.readAsDataURL(newFile);
+                        }
+                    }
+                },
+
+                colorMode: function (newMode) {
+                    this.simulateImage(newMode);
+
+                }
+            },
+
+            methods: {
+                simulateImage: function (mode) {
+                    var uploadedImage = document.getElementById("uploadedImageForSimulate")
+                    var _this = this;
+                    Color.Vision.Simulate(uploadedImage, {
+                        type: mode,
+                        amount: 1.0,
+                        callback: function (canvas) {
+                            _this.simulatedUrl = canvas.toDataURL();
+                        }
+                    });
+                }
+            }
+        })
+    </script>
+
     <!--Font Comparer Vue-->
     <script>
         var fontCompare = new Vue({
@@ -1461,7 +1572,6 @@
                     xhr.onload = () => {
                         const data = JSON.parse(xhr.response);
                         _this.fontList = data;
-                        console.log("fontList changed");
                     };
                     xhr.send();
                 }
@@ -1562,11 +1672,6 @@
                 paragraphNumber: 5,
                 paragraphLength: "medium",
                 generatedText: "Your text will appear here"
-            },
-            watch: {
-                generatorName(newValue) {
-                    console.log(newValue);
-                }
             },
             methods: {
                 generateIpsum: function () {
